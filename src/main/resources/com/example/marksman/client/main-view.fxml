@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="513.0" prefWidth="881.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.marksman.client.UIController">
+   <Pane fx:id="welcomePane" prefHeight="200.0" prefWidth="200.0" visible="false">
+       <Label layoutX="367.0" layoutY="178.0" text="WELCOME">
+         <font>
+            <Font name="System Bold" size="30.0" />
+         </font></Label>
+       <Button layoutX="415.0" layoutY="277.0" mnemonicParsing="false" onAction="#onConnectButtonClick" text="Join">
+           <font>
+               <Font name="System Bold" size="14.0" />
+           </font>
+       </Button>
+       <TextField fx:id="nicknameField" alignment="CENTER" layoutX="354.0" layoutY="232.0" promptText="Enter a nickname">
+           <font>
+               <Font size="14.0" />
+           </font>
+       </TextField>
+       <Label fx:id="welcomeError" layoutX="92.0" layoutY="334.0" prefHeight="133.0" prefWidth="696.0" textAlignment="CENTER">
+           <font>
+               <Font size="20.0" />
+           </font></Label>
+   </Pane>
+    <BorderPane fx:id="mainPane">
+        <center>
+            <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                <center>
+                    <Pane fx:id="gamePane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                        <Line endX="16.0" endY="411.0" layoutX="390.0" layoutY="29.0" startX="16.0" startY="-27.0" />
+                        <Line endX="69.0" endY="-57.0" layoutX="436.0" layoutY="57.0" startX="69.0" startY="382.0" />
+                        <Circle fx:id="smallTarget" layoutX="506.0" layoutY="221.0" radius="22.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
+                        <Circle fx:id="bigTarget" layoutX="406.0" layoutY="222.0" radius="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
+                        <Label fx:id="pauseText" layoutX="200.0" layoutY="160.0" text="ПАУЗА" viewOrder="-1" visible="false">
+                            <font>
+                                <Font size="65.0" />
+                            </font>
+                        </Label>
+                    </Pane>
+                </center>
+            <bottom>
+                    <Pane prefHeight="77.0" prefWidth="400.0" style="-fx-border-color: black; -fx-background-color: white;" viewOrder="-Infinity" BorderPane.alignment="CENTER">
+                        <children>
+                            <Button fx:id="startGame" focusTraversable="false" layoutX="21.0" layoutY="26.0" mnemonicParsing="false" onAction="#startGame" text="Начало игры" />
+                            <Button fx:id="stop" disable="true" focusTraversable="false" layoutX="138.0" layoutY="26.0" mnemonicParsing="false" onAction="#stopGame" text="Завершить игру" />
+                            <Button fx:id="attack" disable="true" focusTraversable="false" layoutX="279.0" layoutY="26.0" mnemonicParsing="false" onAction="#shoot" text="Выстрел" />
+                            <Button fx:id="pause" disable="true" focusTraversable="false" layoutX="476.0" layoutY="26.0" mnemonicParsing="false" onAction="#togglePause" text="Пауза" />
+                            <Button fx:id="leaderboardButton" layoutX="550.0" layoutY="26" mnemonicParsing="false" onAction="#onLeaderboardButtonClick" text="Таблица лидеров" />
+                        </children>
+                    </Pane>
+            </bottom>
+            <left>
+               <VBox fx:id="playersArea" alignment="CENTER" prefHeight="436.0" prefWidth="97.0" BorderPane.alignment="CENTER" />
+            </left>
+            </BorderPane>
+        </center>
+        <top>
+        </top>
+      <right>
+         <VBox fx:id="playersStats" prefHeight="513.0" prefWidth="184.0" style="-fx-border-color: black; -fx-background-color: white;" BorderPane.alignment="CENTER" />
+      </right>
+    </BorderPane>
+</StackPane>

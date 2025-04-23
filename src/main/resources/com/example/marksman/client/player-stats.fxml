@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox fx:id="playerStatsBox" alignment="CENTER" prefHeight="93.0" prefWidth="87.0" spacing="5" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.12" fx:controller="com.example.marksman.client.PlayerStatsController">
+    <padding>
+        <Insets bottom="5" left="5" right="5" top="5" />
+    </padding>
+    
+    <Label fx:id="nickname" text="Игрок: " />
+    <Label fx:id="shots" text="Выстрелов: " />
+    <Label fx:id="score" text="Очков: " />
+</VBox>
