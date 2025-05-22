@@ -68,7 +68,9 @@ public class Server implements GameManager.GameEventListener {
         Action action = new Action(Action.Type.REMOVE, p.username);
         String json = AppConfig.GSON.toJson(action);
         for (PlayerHandler h : handlerList) {
-            h.sendMessage(json);
+            if (!h.isMobileClient()) {
+                h.sendMessage(json);
+            }
         }
     }
 
@@ -80,6 +82,13 @@ public class Server implements GameManager.GameEventListener {
     }
 
     public void addPlayer(String nickname, PlayerHandler handler) throws IOException {
+        // Мобильные клиенты не добавляются в список игроков
+        if (handler.isMobileClient()) {
+            LOGGER.info("Мобильный клиент подключен. Не добавляем в список игроков.");
+            handlerList.add(handler);
+            return;
+        }
+        
         String color = AppConfig.PLAYER_COLORS[rand.nextInt(AppConfig.PLAYER_COLORS.length)];
         while (containsColor(color)) color = AppConfig.PLAYER_COLORS[rand.nextInt(AppConfig.PLAYER_COLORS.length)];
 
@@ -107,7 +116,9 @@ public class Server implements GameManager.GameEventListener {
         Action action = new Action(Action.Type.NEW, jsonPlayer);
         String json = AppConfig.GSON.toJson(action);
         for (PlayerHandler h : handlerList) {
-            h.sendMessage(json);
+            if (!h.isMobileClient()) {
+                h.sendMessage(json);
+            }
         }
     }
 
@@ -115,7 +126,9 @@ public class Server implements GameManager.GameEventListener {
         Action wantToStart = new Action(Action.Type.WANT_TO_START, handler.getPlayerInfo().username);
         String json = AppConfig.GSON.toJson(wantToStart);
         for (PlayerHandler h : handlerList) {
-            h.sendMessage(json);
+            if (!h.isMobileClient()) {
+                h.sendMessage(json);
+            }
         }
     }
 
@@ -163,7 +176,9 @@ public class Server implements GameManager.GameEventListener {
         Action action = new Action(Action.Type.WINNER, jsonWinner);
         String json = AppConfig.GSON.toJson(action);
         for (PlayerHandler p : handlerList) {
-            p.sendMessage(json);
+            if (!p.isMobileClient()) {
+                p.sendMessage(json);
+            }
         }
     }
     
@@ -181,7 +196,9 @@ public class Server implements GameManager.GameEventListener {
         Action action = new Action(Action.Type.STOP, null);
         String json = AppConfig.GSON.toJson(action);
         for (PlayerHandler h : handlerList) {
-            h.sendMessage(json);
+            if (!h.isMobileClient()) {
+                h.sendMessage(json);
+            }
         }
     }
     
@@ -190,7 +207,9 @@ public class Server implements GameManager.GameEventListener {
         Action action = new Action(Action.Type.STATE, jsonState);
         String json = AppConfig.GSON.toJson(action);
         for (PlayerHandler h : handlerList) {
-            h.sendMessage(json);
+            if (!h.isMobileClient()) {
+                h.sendMessage(json);
+            }
         }
     }
     
@@ -199,7 +218,9 @@ public class Server implements GameManager.GameEventListener {
         Action action = new Action(type, jsonInfo);
         String json = AppConfig.GSON.toJson(action);
         for (PlayerHandler h : handlerList) {
-            h.sendMessage(json);
+            if (!h.isMobileClient()) {
+                h.sendMessage(json);
+            }
         }
     }
 }

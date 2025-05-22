@@ -14,6 +14,7 @@ public class PlayerHandler extends Thread {
     private final DataInputStream in;
     private final DataOutputStream out;
     private PlayerInfo playerInfo;
+    private boolean isMobileClient = false;
     private static final Logger LOGGER = Logger.getLogger(PlayerHandler.class.getName());
 
     public PlayerHandler(Server server, Socket socket) throws IOException {
@@ -28,15 +29,39 @@ public class PlayerHandler extends Thread {
     @Override
     public void run() {
         try {
-            checkingPlayers();
-            handlingMessage();
+            String firstMessage = in.readUTF();
+            Action action = AppConfig.GSON.fromJson(firstMessage, Action.class);
+            
+            if (action.type() == Action.Type.MOBILE_CLIENT) {
+                isMobileClient = true;
+                LOGGER.info("Подключен мобильный клиент");
+
+                out.writeUTF(AppConfig.GSON.toJson(new Action(Action.Type.MOBILE_OK, "")));
+                handlingMobileClient();
+            } else {
+                // Обычный клиент
+                String nickname = firstMessage;
+                checkingPlayers(nickname);
+                handlingMessage();
+            }
         } catch (IOException e) {
             stopConnection();
         }
     }
 
-    private void checkingPlayers() throws IOException {
-        String nickname = in.readUTF();
+    private void handlingMobileClient() throws IOException {
+        while (true) {
+            String msg = in.readUTF();
+            Action action = AppConfig.GSON.fromJson(msg, Action.class);
+            if (action.type() == Action.Type.LEADERBOARD_REQUEST) {
+                server.sendLeaderboard(this);
+            } else {
+                LOGGER.warning("Мобильный клиент пытается выполнить неразрешенное действие: " + action.type());
+            }
+        }
+    }
+
+    private void checkingPlayers(String nickname) throws IOException {
         while (server.containsNickname(nickname)) {
             out.writeUTF(nickname + " is already in use.");
             nickname = in.readUTF();
@@ -86,13 +111,16 @@ public class PlayerHandler extends Thread {
 
     private void stopConnection() {
         try {
-            LOGGER.info("Закрытие соединения с игроком: " + 
-                        (playerInfo != null ? playerInfo.username : "неизвестный"));
+            if (isMobileClient) {
+                LOGGER.info("Закрытие соединения с мобильным клиентом");
+            } else {
+                LOGGER.info("Закрытие соединения с игроком: " + 
+                            (playerInfo != null ? playerInfo.username : "неизвестный"));
+                server.removePlayer(this);
+            }
             clientSocket.close();
         } catch (IOException e) {
             LOGGER.warning("Ошибка при закрытии соединения: " + e.getMessage());
-        } finally {
-            server.removePlayer(this);
         }
     }
 
@@ -110,5 +138,9 @@ public class PlayerHandler extends Thread {
 
     public void setPlayerInfo(PlayerInfo playerInfo) {
         this.playerInfo = playerInfo;
+    }
+    
+    public boolean isMobileClient() {
+        return isMobileClient;
     }
 }

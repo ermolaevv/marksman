@@ -16,5 +16,7 @@ public record Action(Type type, String info) {
         STOP,
         LEADERBOARD_REQUEST,
         LEADERBOARD_RESPONSE,
+        MOBILE_CLIENT,
+        MOBILE_OK,
     }
 }
